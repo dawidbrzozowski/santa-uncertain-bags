@@ -1,0 +1,38 @@
+GIFTS
+9 TYPES
+
+horse x 1000
+ball x 1100
+bike x 500
+train x 1000
+coal x 166
+book x 1200
+doll x 1000
+blocks x 1000
+gloves x 200
+
+ALL TOGETHER x 7166
+
+SANTA HAS 1000 BAGS
+
+no bag can contain more than 50
+
+WEIGHTS
+
+horse = max(0, np.random.normal(5,2,1)[0])
+
+ball = max(0, 1 + np.random.normal(1,0.3,1)[0])
+
+bike = max(0, np.random.normal(20,10,1)[0])
+
+train = max(0, np.random.normal(10,5,1)[0])
+
+coal = 47 * np.random.beta(0.5,0.5,1)[0]
+
+book = np.random.chisquare(2,1)[0]
+
+doll = np.random.gamma(5,1,1)[0]
+
+block = np.random.triangular(5,10,20,1)[0]
+
+gloves = 3.0 + np.random.rand(1)[0] if np.random.rand(1) < 0.3 else np.random.rand(1)[0]
