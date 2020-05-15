@@ -22,20 +22,20 @@ class BagPacker:
         self.max_bag_weight = max_bag_weight
         for _ in range(bags_amount):
             try:
-                bags.append(self.pack_bag())
+                bags.append(self._pack_bag())
             except IndexError:
                 break
         return bags
 
-    def pack_bag(self):
+    def _pack_bag(self):
         self.curr_bag_weight = 0
-        allowed_gifts = self.get_allowed_gifts_descending_weight()
-        bag = self.try_packing_bag(init_bag=[], allowed_gifts=allowed_gifts)
+        allowed_gifts = self._get_allowed_gifts_descending_weight()
+        bag = self._try_packing_bag(init_bag=[], allowed_gifts=allowed_gifts)
         while len(bag) < MIN_GIFT_IN_BAG:
-            bag = self.repack(bag, allowed_gifts)
+            bag = self._repack(bag, allowed_gifts)
         return bag
 
-    def try_packing_bag(self, init_bag, allowed_gifts):
+    def _try_packing_bag(self, init_bag, allowed_gifts):
         bag = init_bag
         for gift_type in allowed_gifts:
             while self.is_place_in_bag_for_gift_type(gift_type) and self.gift_amounts[gift_type] > 0:
@@ -44,30 +44,30 @@ class BagPacker:
                 self.gift_amounts[gift_type] -= 1
         return bag
 
-    def repack(self, bag, allowed_gifts):
-        allowed_gifts = self.unpack(bag, allowed_gifts)
-        return self.try_packing_bag(bag, allowed_gifts)
+    def _repack(self, bag, allowed_gifts):
+        allowed_gifts = self._unpack(bag, allowed_gifts)
+        return self._try_packing_bag(bag, allowed_gifts)
 
-    def unpack(self, bag, allowed_gifts):
-        unpacked_gift = self.pop_gift(bag)
+    def _unpack(self, bag, allowed_gifts):
+        unpacked_gift = self._pop_gift(bag)
         allowed_gifts.remove(unpacked_gift)
         if not len(allowed_gifts):
-            gift_unpacked = self.pop_gift(bag)
-            allowed_gifts = self.prepare_next_allowed_gifts(gift_unpacked)
+            gift_unpacked = self._pop_gift(bag)
+            allowed_gifts = self._prepare_next_allowed_gifts(gift_unpacked)
         return allowed_gifts
 
-    def pop_gift(self, bag):
+    def _pop_gift(self, bag):
         gift_unpacked = bag.pop(-1)
         self.curr_bag_weight -= self.gift_weights[gift_unpacked]
         self.gift_amounts[gift_unpacked] += 1
         return gift_unpacked
 
-    def get_allowed_gifts_descending_weight(self):
+    def _get_allowed_gifts_descending_weight(self):
         return sorted([gift_type for gift_type in self.gift_weights if self.gift_amounts[gift_type] >= 0],
                       key=self.gift_weights.get, reverse=True)
 
-    def prepare_next_allowed_gifts(self, gift_type):
-        available_gifts_descending = self.get_allowed_gifts_descending_weight()
+    def _prepare_next_allowed_gifts(self, gift_type):
+        available_gifts_descending = self._get_allowed_gifts_descending_weight()
         if not gift_type == available_gifts_descending[-1]:
             gift_type_idx = available_gifts_descending.index(gift_type)
             return available_gifts_descending[gift_type_idx + 1:-1]
