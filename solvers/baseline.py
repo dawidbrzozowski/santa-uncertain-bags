@@ -38,7 +38,7 @@ class BagPacker:
     def _try_packing_bag(self, init_bag, allowed_gifts):
         bag = init_bag
         for gift_type in allowed_gifts:
-            while self.is_place_in_bag_for_gift_type(gift_type) and self.gift_amounts[gift_type] > 0:
+            while self._is_place_in_bag_for_gift_type(gift_type) and self.gift_amounts[gift_type] > 0:
                 self.curr_bag_weight += self.gift_weights[gift_type]
                 bag.append(gift_type)
                 self.gift_amounts[gift_type] -= 1
@@ -74,7 +74,7 @@ class BagPacker:
         else:
             return []
 
-    def is_place_in_bag_for_gift_type(self, gift_type):
+    def _is_place_in_bag_for_gift_type(self, gift_type):
         return True if self.curr_bag_weight + self.gift_weights[gift_type] < self.max_bag_weight else False
 
 
