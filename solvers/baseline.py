@@ -29,10 +29,10 @@ class BagPacker:
 
     def _pack_bag(self):
         self.curr_bag_weight = 0
-        allowed_gifts = self._get_allowed_gifts_descending_weight()
-        bag = self._try_packing_bag(init_bag=[], allowed_gifts=allowed_gifts)
+        all_allowed_gifts = self._get_allowed_gifts_descending_weight()
+        bag = self._try_packing_bag(init_bag=[], allowed_gifts=all_allowed_gifts)
         while len(bag) < MIN_GIFT_IN_BAG:
-            bag = self._repack(bag, allowed_gifts)
+            bag = self._repack(bag)
         return bag
 
     def _try_packing_bag(self, init_bag, allowed_gifts):
@@ -44,17 +44,10 @@ class BagPacker:
                 self.gift_amounts[gift_type] -= 1
         return bag
 
-    def _repack(self, bag, allowed_gifts):
-        allowed_gifts = self._unpack(bag, allowed_gifts)
+    def _repack(self, bag):
+        gift_unpacked = self._pop_gift(bag)
+        allowed_gifts = self._prepare_next_allowed_gifts(gift_unpacked)
         return self._try_packing_bag(bag, allowed_gifts)
-
-    def _unpack(self, bag, allowed_gifts):
-        unpacked_gift = self._pop_gift(bag)
-        allowed_gifts.remove(unpacked_gift)
-        if not len(allowed_gifts):
-            gift_unpacked = self._pop_gift(bag)
-            allowed_gifts = self._prepare_next_allowed_gifts(gift_unpacked)
-        return allowed_gifts
 
     def _pop_gift(self, bag):
         gift_unpacked = bag.pop(-1)
@@ -70,7 +63,7 @@ class BagPacker:
         available_gifts_descending = self._get_allowed_gifts_descending_weight()
         if not gift_type == available_gifts_descending[-1]:
             gift_type_idx = available_gifts_descending.index(gift_type)
-            return available_gifts_descending[gift_type_idx + 1:-1]
+            return available_gifts_descending[gift_type_idx + 1:]
         else:
             return []
 
@@ -84,7 +77,7 @@ def main(args):
     gift_weights = load_json(DEFAULT_GIFT_WEIGHTS)
     p = BagPacker(gift_amounts, gift_weights)
     bags = p.pack_bags(args.max_bag_weight)
-    score_eval = ScoreEvaluator()
+    score_eval = ScoreEvaluator(args.max_bag_weight)
     print(f'Score: {score_eval.calculate_score(bags)}')
 
     if args.save_path:
