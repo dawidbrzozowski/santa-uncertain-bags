@@ -34,5 +34,5 @@ class IdController:
 
     def convert_gift_to_kaggle_format(self, gift: str):
         gift_with_index = f'{gift}_{self.ids[gift]}'
-        self.ids[gift_with_index] += 1
+        self.ids[gift] += 1
         return gift_with_index
