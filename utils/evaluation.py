@@ -1,7 +1,7 @@
 import numpy as np
 
 BAG_CAPACITY = 50
-DEFAULT_ITERATIONS = 40
+DEFAULT_ITERATIONS = 50
 
 
 class ScoreEvaluator:

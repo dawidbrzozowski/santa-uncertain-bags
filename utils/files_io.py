@@ -1,3 +1,4 @@
+import os
 from collections import defaultdict
 import csv
 import json
@@ -6,6 +7,13 @@ import json
 def load_json(path):
     with open(path, 'r') as f:
         return json.load(f)
+
+
+def write_json_file(filename, data):
+    _, ext = os.path.splitext(filename)
+    filename = filename if ext == ".json" else f'{filename}.json'
+    with open(filename, 'w') as out_file:
+        json.dump(data, out_file, ensure_ascii=False, indent=2)
 
 
 class KagglePreparer:
