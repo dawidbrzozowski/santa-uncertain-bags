@@ -2,7 +2,7 @@
 Link to the competition: https://www.kaggle.com/c/santas-uncertain-bags
 ### Get all packages needed in project using pip install -r requirements.txt
 
-## The application has many ways to run.
+## The application has many ways to run. Available arguments:
 \-- max_bag_weight - max bag weight (capacity), that will be used during packing bags algorithm. <br>
 \-- std_mul - how much impact standard deviation should have on packaging <br>
 \-- step_mul - Default step used in 1+1 algorithm for making random step. Default value = 0.6 <br>
